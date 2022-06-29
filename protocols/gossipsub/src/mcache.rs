@@ -120,21 +120,30 @@ impl MessageCache {
         peer: &PeerId,
     ) -> Option<(&RawGossipsubMessage, u32)> {
         let iwant_counts = &mut self.iwant_counts;
-        self.msgs.get(message_id).and_then(|(message, _)| {
-            if !message.validated {
+        match self.msgs.get(message_id) {
+            None => {
+                debug!(
+                    "The message doesn't exist in mcache. message_id: {}",
+                    message_id
+                );
                 None
-            } else {
-                Some((message, {
-                    let count = iwant_counts
-                        .entry(message_id.clone())
-                        .or_default()
-                        .entry(*peer)
-                        .or_default();
-                    *count += 1;
-                    *count
-                }))
             }
-        })
+            Some((message, _)) => {
+                if !message.validated {
+                    None
+                } else {
+                    Some((message, {
+                        let count = iwant_counts
+                            .entry(message_id.clone())
+                            .or_default()
+                            .entry(*peer)
+                            .or_default();
+                        *count += 1;
+                        *count
+                    }))
+                }
+            }
+        }
     }
 
     /// Gets a message with [`MessageId`] and tags it as validated.
