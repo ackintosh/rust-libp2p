@@ -141,7 +141,7 @@ mod backoff;
 mod behaviour;
 mod config;
 mod gossip_promises;
-mod handler;
+pub mod handler;
 mod mcache;
 pub mod metrics;
 mod peer_score;
@@ -149,13 +149,13 @@ pub mod subscription_filter;
 pub mod time_cache;
 mod topic;
 mod transform;
-mod types;
+pub mod types;
 
 #[cfg(test)]
 #[macro_use]
 extern crate derive_builder;
 
-mod rpc_proto;
+pub mod rpc_proto;
 
 pub use self::behaviour::{Gossipsub, GossipsubEvent, MessageAuthenticity};
 pub use self::transform::{DataTransform, IdentityTransform};
