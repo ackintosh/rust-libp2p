@@ -342,7 +342,7 @@ where
     pub fn new_with_metrics(
         privacy: MessageAuthenticity,
         config: GossipsubConfig,
-        metrics_registry: &mut Registry,
+        metrics_registry: &mut Registry<Box<dyn prometheus_client::encoding::proto::EncodeMetric>>,
         metrics_config: MetricsConfig,
     ) -> Result<Self, &'static str> {
         Self::new_with_subscription_filter_and_transform(
@@ -365,7 +365,7 @@ where
     pub fn new_with_subscription_filter(
         privacy: MessageAuthenticity,
         config: GossipsubConfig,
-        metrics: Option<(&mut Registry, MetricsConfig)>,
+        metrics: Option<(&mut Registry<Box<dyn prometheus_client::encoding::proto::EncodeMetric>>, MetricsConfig)>,
         subscription_filter: F,
     ) -> Result<Self, &'static str> {
         Self::new_with_subscription_filter_and_transform(
@@ -388,7 +388,7 @@ where
     pub fn new_with_transform(
         privacy: MessageAuthenticity,
         config: GossipsubConfig,
-        metrics: Option<(&mut Registry, MetricsConfig)>,
+        metrics: Option<(&mut Registry<Box<dyn prometheus_client::encoding::proto::EncodeMetric>>, MetricsConfig)>,
         data_transform: D,
     ) -> Result<Self, &'static str> {
         Self::new_with_subscription_filter_and_transform(
@@ -411,7 +411,7 @@ where
     pub fn new_with_subscription_filter_and_transform(
         privacy: MessageAuthenticity,
         config: GossipsubConfig,
-        metrics: Option<(&mut Registry, MetricsConfig)>,
+        metrics: Option<(&mut Registry<Box<dyn prometheus_client::encoding::proto::EncodeMetric>>, MetricsConfig)>,
         subscription_filter: F,
         data_transform: D,
     ) -> Result<Self, &'static str> {
