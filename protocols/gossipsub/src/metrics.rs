@@ -123,11 +123,11 @@ pub struct Metrics {
     /// The number of invalid messages received for a given topic.
     invalid_messages: Family<TopicHash, Counter>,
     /// The number of messages accepted by the application (validation result).
-    accepted_messages: Family<TopicHash, Counter>,
+    pub accepted_messages: Family<TopicHash, Counter>,
     /// The number of messages ignored by the application (validation result).
-    ignored_messages: Family<TopicHash, Counter>,
+    pub ignored_messages: Family<TopicHash, Counter>,
     /// The number of messages rejected by the application (validation result).
-    rejected_messages: Family<TopicHash, Counter>,
+    pub rejected_messages: Family<TopicHash, Counter>,
 
     /* Metrics regarding mesh state */
     /// Number of peers in our mesh. This metric should be updated with the count of peers for a

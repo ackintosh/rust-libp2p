@@ -2171,7 +2171,14 @@ where
             }
 
             if let Some(m) = self.metrics.as_mut() {
-                m.peers_removed(topic_hash, Churn::BadScore, to_remove_peers.len())
+                m.peers_removed(topic_hash, Churn::BadScore, to_remove_peers.len());
+
+                // test
+                m.register_invalid_message(topic_hash);
+                m.accepted_messages.get_or_create(topic_hash).inc();
+                m.ignored_messages.get_or_create(topic_hash).inc();
+                m.rejected_messages.get_or_create(topic_hash).inc();
+                m.register_iwant(topic_hash);
             }
 
             for peer_id in to_remove_peers {
