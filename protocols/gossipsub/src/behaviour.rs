@@ -592,6 +592,7 @@ where
         topic: impl Into<TopicHash>,
         data: impl Into<Vec<u8>>,
     ) -> Result<MessageId, PublishError> {
+        println!("behaviour::publish");
         let data = data.into();
         let topic = topic.into();
 
@@ -599,8 +600,10 @@ where
         let transformed_data = self
             .data_transform
             .outbound_transform(&topic, data.clone())?;
+        println!("behaviour::publish1");
 
         let raw_message = self.build_raw_message(topic, transformed_data)?;
+        println!("behaviour::publish2");
 
         // calculate the message id from the un-transformed data
         let msg_id = self.config.message_id(&GossipsubMessage {
@@ -609,6 +612,7 @@ where
             sequence_number: raw_message.sequence_number,
             topic: raw_message.topic.clone(),
         });
+        println!("behaviour::publish3");
 
         let event = GossipsubRpc {
             subscriptions: Vec::new(),
@@ -616,11 +620,15 @@ where
             control_msgs: Vec::new(),
         }
         .into_protobuf();
+        println!("behaviour::publish4");
 
         // check that the size doesn't exceed the max transmission size
+        println!("event_encoded_len: {}, max_transmit_size: {}", event.encoded_len(), self.config.max_transmit_size());
         if event.encoded_len() > self.config.max_transmit_size() {
+            println!("behaviour::publish4 - 1");
             return Err(PublishError::MessageTooLarge);
         }
+        println!("behaviour::publish5");
 
         // Check the if the message has been published before
         if self.duplicate_cache.contains(&msg_id) {
@@ -632,6 +640,7 @@ where
             );
             return Err(PublishError::Duplicate);
         }
+        println!("behaviour::publish6");
 
         trace!("Publishing message: {:?}", msg_id);
 
