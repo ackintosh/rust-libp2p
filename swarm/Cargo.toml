@@ -26,6 +26,6 @@ void = "1"
 
 [dev-dependencies]
 async-std = { version = "1.6.2", features = ["attributes"] }
-env_logger = "0.9"
+env_logger = "0.10"
 libp2p = { path = "../", default-features = false, features = ["plaintext", "identify", "ping", "noise", "yamux", "mplex", "tcp-async-io"] }
 quickcheck = { package = "quickcheck-ext", path = "../misc/quickcheck-ext" }
