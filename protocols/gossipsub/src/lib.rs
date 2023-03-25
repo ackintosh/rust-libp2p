@@ -149,14 +149,14 @@ mod behaviour;
 mod config;
 mod error_priv;
 mod gossip_promises;
-mod handler;
+pub mod handler;
 mod mcache;
 mod peer_score;
 mod topic;
 mod transform;
-mod types;
+pub mod types;
 
-mod rpc_proto;
+pub mod rpc_proto;
 
 pub use self::behaviour::{Behaviour, Event, MessageAuthenticity};
 pub use self::config::{Config, ConfigBuilder, ValidationMode, Version};
