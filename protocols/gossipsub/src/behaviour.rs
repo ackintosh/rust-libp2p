@@ -65,6 +65,7 @@ use crate::types::{PeerConnections, PeerKind, Rpc};
 use crate::{rpc_proto::proto, TopicScoreParams};
 use crate::{PublishError, SubscriptionError, ValidationError};
 use quick_protobuf::{MessageWrite, Writer};
+use std::time::SystemTime;
 use std::{cmp::Ordering::Equal, fmt::Debug};
 use wasm_timer::Interval;
 
@@ -732,7 +733,7 @@ where
                                     // Do not include peers we have already added to the recipient peers
                                 !recipient_peers.contains(*p) &&
                                     // We have already included explicit peers, so just make sure
-                                    // these peers are above threshold 
+                                    // these peers are above threshold
                                 !self.score_below_threshold(p, |ts| ts.publish_threshold).0
                             })
                             .collect::<Vec<_>>();
@@ -1882,6 +1883,13 @@ where
 
         // Calculate the message id on the transformed data.
         let msg_id = self.config.message_id(&message);
+        println!(
+            r#"[flood_publishing_test]{{"event":"receive","propagation_source":"{propagation_source}","message_id":"{msg_id}","time":{}}}"#,
+            SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_millis()
+        );
 
         // Check the validity of the message
         // Peers get penalized if this message is invalid. We don't add it to the duplicate cache
@@ -3589,6 +3597,34 @@ where
         _: &mut impl PollParameters,
     ) -> Poll<NetworkBehaviourAction<Self::OutEvent, THandlerInEvent<Self>>> {
         if let Some(event) = self.events.pop_front() {
+            match &event {
+                NetworkBehaviourAction::NotifyHandler { peer_id, event, .. } => match event {
+                    HandlerIn::Message(m) => {
+                        for message in m.publish.iter() {
+                            let msg_id = self.config.message_id(&Message {
+                                source: Some(peer_id.clone()),
+                                data: message.data.clone().expect("data"),
+                                sequence_number: message
+                                    .seqno
+                                    .clone()
+                                    .map(|v| u64::from_be_bytes(v.as_slice().try_into().unwrap())),
+                                topic: TopicHash::from_raw(&message.topic),
+                            });
+
+                            println!(
+                                r#"[flood_publishing_test]{{"event":"send","to":"{peer_id}","message_id":"{msg_id}","time":{}}}"#,
+                                SystemTime::now()
+                                    .duration_since(SystemTime::UNIX_EPOCH)
+                                    .unwrap()
+                                    .as_millis()
+                            );
+                        }
+                    }
+                    _ => {}
+                },
+                _ => {}
+            }
+
             return Poll::Ready(event);
         }
 
