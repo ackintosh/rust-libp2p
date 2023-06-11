@@ -751,6 +751,7 @@ where
         let msg_bytes = event.get_size();
         for peer_id in recipient_peers.iter() {
             trace!("Sending message to peer: {:?}", peer_id);
+            println!(r#"[flood_publishing_test]{{"event":"send","to":"{peer_id}","message_id":"{msg_id}","time":{}}}"#, SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis());
             self.send_message(*peer_id, event.clone())?;
 
             if let Some(m) = self.metrics.as_mut() {
@@ -1795,6 +1796,7 @@ where
 
         // Calculate the message id on the transformed data.
         let msg_id = self.config.message_id(&message);
+        println!(r#"[flood_publishing_test]{{"event":"receive","propagation_source":"{propagation_source}","message_id":"{msg_id}","time":{}}}"#, SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis());
 
         // Check the validity of the message
         // Peers get penalized if this message is invalid. We don't add it to the duplicate cache
@@ -2759,6 +2761,9 @@ where
             let msg_bytes = event.get_size();
             for peer in recipient_peers.iter() {
                 debug!("Sending message: {:?} to peer {:?}", msg_id, peer);
+                if propagation_source.is_none() {
+                    println!(r#"[flood_publishing_test]{{"event":"send","to":"{peer}","message_id":"{msg_id}","time":{}}}"#, SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis());
+                }
                 self.send_message(*peer, event.clone())?;
                 if let Some(m) = self.metrics.as_mut() {
                     m.msg_sent(&message.topic, msg_bytes);
