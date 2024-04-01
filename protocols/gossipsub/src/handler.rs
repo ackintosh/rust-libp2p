@@ -407,6 +407,11 @@ impl ConnectionHandler for Handler {
     }
 
     fn on_behaviour_event(&mut self, message: HandlerIn) {
+        tracing::debug!(
+            "ackintosh is_enabled:{} is_matched:{} on_behaviour_event message:{message:?}",
+            matches!(self, Handler::Enabled(_)),
+            matches!(self, Handler::Enabled(h) if h.in_mesh)
+        );
         match self {
             Handler::Enabled(handler) => match message {
                 HandlerIn::Message(m) => handler.send_queue.push(m.into_protobuf()),
@@ -424,7 +429,12 @@ impl ConnectionHandler for Handler {
     }
 
     fn connection_keep_alive(&self) -> bool {
-        matches!(self, Handler::Enabled(h) if h.in_mesh)
+        tracing::debug!(
+            "ackintosh connection_keep_alive matches:{}",
+            matches!(self, Handler::Enabled(h) if h.in_mesh)
+        );
+        // matches!(self, Handler::Enabled(h) if h.in_mesh)
+        true
     }
 
     #[tracing::instrument(level = "trace", name = "ConnectionHandler::poll", skip(self, cx))]
