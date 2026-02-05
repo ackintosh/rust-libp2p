@@ -64,8 +64,8 @@ async fn port_mapping_success() {
     // Wait for UPnP events
     tokio::time::timeout(Duration::from_secs(5), async {
         loop {
-            match swarm.next_swarm_event().await {
-                SwarmEvent::Behaviour(upnp_event) => match upnp_event {
+            if let SwarmEvent::Behaviour(upnp_event) = swarm.next_swarm_event().await {
+                match upnp_event {
                     upnp::Event::NewExternalAddr { external_addr, .. } => {
                         assert!(
                             external_addr.to_string().contains(MOCK_EXTERNAL_IP),
@@ -74,8 +74,7 @@ async fn port_mapping_success() {
                         break;
                     }
                     event => panic!("Unexpected event: {:?}", event),
-                },
-                _ => {}
+                }
             }
         }
     })
@@ -131,14 +130,9 @@ async fn port_mapping_failure() {
 
     let result = tokio::time::timeout(Duration::from_secs(5), async {
         loop {
-            match swarm.next_swarm_event().await {
-                SwarmEvent::Behaviour(upnp_event) => {
-                    // We expect no UPnP event due to the port mapping error
-                    match upnp_event {
-                        event => panic!("Unexpected UPnP event: {:?}", event),
-                    }
-                }
-                _ => {}
+            if let SwarmEvent::Behaviour(upnp_event) = swarm.next_swarm_event().await {
+                // We expect no UPnP event due to the port mapping error
+                panic!("Unexpected UPnP event: {upnp_event:?}");
             }
         }
     })
@@ -188,14 +182,14 @@ async fn non_routable_gateway() {
     // Wait for UPnP events
     tokio::time::timeout(Duration::from_secs(5), async {
         loop {
-            match swarm.next_swarm_event().await {
-                SwarmEvent::Behaviour(upnp_event) => match upnp_event {
+            if let SwarmEvent::Behaviour(upnp_event) = swarm.next_swarm_event().await {
+                match upnp_event {
+                    // The gateway returned a private IP, so it should be deemed non-routable.
                     upnp::Event::NonRoutableGateway => {
                         break;
                     }
                     event => panic!("Unexpected event: {:?}", event),
-                },
-                _ => {}
+                }
             }
         }
     })
@@ -225,15 +219,14 @@ async fn gateway_not_found() {
     // Wait for GatewayNotFound event
     tokio::time::timeout(Duration::from_secs(5), async {
         loop {
-            match swarm.next_swarm_event().await {
-                SwarmEvent::Behaviour(upnp_event) => match upnp_event {
+            if let SwarmEvent::Behaviour(upnp_event) = swarm.next_swarm_event().await {
+                match upnp_event {
                     upnp::Event::GatewayNotFound => {
                         // Expected event received - test passes
                         break;
                     }
                     event => panic!("Unexpected UPnP event: {:?}", event),
-                },
-                _ => {}
+                }
             }
         }
     })
