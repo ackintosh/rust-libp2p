@@ -229,13 +229,14 @@ async fn gateway_not_found() {
                 SwarmEvent::Behaviour(upnp_event) => match upnp_event {
                     upnp::Event::GatewayNotFound => {
                         // Expected event received - test passes
-                        break
-                    },
+                        break;
+                    }
                     event => panic!("Unexpected UPnP event: {:?}", event),
                 },
                 _ => {}
             }
         }
     })
-    .await.unwrap();
+    .await
+    .unwrap();
 }

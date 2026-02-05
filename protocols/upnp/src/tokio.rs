@@ -94,8 +94,8 @@ pub(crate) struct Gateway {
 ///
 /// # Arguments
 ///
-/// * `timeout` - Optional timeout duration for the gateway search.
-///   If `None`, the default timeout from [`igd_next::SearchOptions`] is used.
+/// * `timeout` - Optional timeout duration for the gateway search. If `None`, the default timeout
+///   from [`igd_next::SearchOptions`] is used.
 pub(crate) fn search_gateway(
     timeout: Option<Duration>,
 ) -> oneshot::Receiver<Result<Gateway, Box<dyn Error + Send + Sync>>> {
