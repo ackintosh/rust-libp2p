@@ -35,7 +35,7 @@
 ## 0.4.0
 
 - update igd-next to 0.15.1.
-  See [PR XXXX](https://github.com/libp2p/rust-libp2p/pull/XXXX).
+  See [PR 5625](https://github.com/libp2p/rust-libp2p/pull/5625).
 
 <!-- Update to libp2p-core v0.43.0 -->
 
