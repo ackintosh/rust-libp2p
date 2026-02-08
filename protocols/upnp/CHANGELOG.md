@@ -1,3 +1,7 @@
+## 0.6.1
+
+- Add integration tests. See [PR 6264](https://github.com/libp2p/rust-libp2p/pull/6264)
+
 ## 0.6.0
 
 - Change `Event::NewExternalAddr` and `Event::ExpiredExternalAddr` from tuple variants to struct variants
