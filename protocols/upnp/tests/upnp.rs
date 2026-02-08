@@ -19,6 +19,8 @@
 // DEALINGS IN THE SOFTWARE.
 
 //! Integration tests for the `UPnP` network behaviour.
+//!
+//! NOTE: If an IGD device exists in the test environment, results may be unintended.
 
 use std::time::Duration;
 
