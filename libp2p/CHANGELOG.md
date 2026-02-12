@@ -3,6 +3,9 @@
 - Fix `metrics` delegation to gossipsub protocol.
   See [PR 6180](https://github.com/libp2p/rust-libp2p/pull/6180)
 
+- Raise MSRV to 1.88.0.
+  See [PR XXXX](https://github.com/libp2p/rust-libp2p/pull/XXXX).
+
 ## 0.56.0
 
 - Remove `async-std` support.
