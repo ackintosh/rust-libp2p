@@ -4,7 +4,7 @@
   See [PR 6180](https://github.com/libp2p/rust-libp2p/pull/6180)
 
 - Raise MSRV to 1.88.0.
-  See [PR XXXX](https://github.com/libp2p/rust-libp2p/pull/XXXX).
+  See [PR 6273](https://github.com/libp2p/rust-libp2p/pull/6273).
 
 ## 0.56.0
 
