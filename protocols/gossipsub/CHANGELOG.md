@@ -1,3 +1,8 @@
+## 0.51.0
+
+- Raise MSRV to 1.88.0.
+  See [PR 6273](https://github.com/libp2p/rust-libp2p/pull/6273).
+
 ## 0.50.0
 - Log when sending and receiving messages.
   See [PR 6234](https://github.com/libp2p/rust-libp2p/pull/6234)
