@@ -11,7 +11,7 @@ keywords = ["peer-to-peer", "libp2p", "networking"]
 categories = ["network-programming", "asynchronous"]
 
 [features]
-wasm-bindgen = ["getrandom/js", "futures-timer/wasm-bindgen"]
+wasm-bindgen = ["getrandom/js", "futures-timer/wasm-bindgen", "dep:getrandom-v03", "getrandom-v03/wasm_js"]
 metrics = ["prometheus-client"]
 partial_messages = []
 
@@ -26,6 +26,7 @@ fnv = "1.0.7"
 futures = { workspace = true }
 futures-timer = "3.0.3"
 getrandom = { workspace = true }
+getrandom-v03 = { package = "getrandom", version = "0.3", optional = true }
 hashlink = { workspace = true }
 hex_fmt = "0.3.0"
 web-time = { workspace = true }

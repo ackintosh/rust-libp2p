@@ -1,0 +1,7 @@
+# libp2p-gossipsub depends on rand 0.9, which transitively depends on getrandom 0.3.
+# getrandom 0.3 does not support wasm32-unknown-unknown by default and requires both
+# the `wasm_js` Cargo feature and this `--cfg getrandom_backend="wasm_js"` rustflag
+# to select the JS backend. Note: in getrandom 0.4, this rustflag is no longer needed
+# and only the `wasm_js` Cargo feature is required.
+[target.wasm32-unknown-unknown]
+rustflags = ['--cfg', 'getrandom_backend="wasm_js"']
