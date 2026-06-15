@@ -2944,7 +2944,7 @@ dependencies = [
  "prost 0.14.3",
  "prost-codec",
  "rand 0.8.6",
- "rand_core 0.6.4",
+ "rand_core 0.10.0",
  "thiserror 2.0.18",
  "tokio",
  "tracing",
